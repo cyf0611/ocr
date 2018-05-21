@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<style type="text/css" media="screen">
+		.indexbtn_container {
+			width: 60%;
+			height: 200px;
+			position: absolute;
+			left: 50%;
+			transform: translate(-50%,-50%);
+			top: 50%;
+
+		}
+		#scan {
+			width: 100%;
+			height: 25%;
+		}
+		#upload {
+			width: 100%;
+			height: 25%;
+
+			
+		}
+		#fileToUpload {
+			width: 100%;
+			height: 25%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+		}
+
+
+		form {
+			margin: 20px;
+			display: none;
+		}
+		.form-control {
+			display: inline-block;
+			width: auto!important;
+		}
+		.col-xs-3 {
+			line-height: 35px;
+		}
+		.formbtn_container {
+			width: 80%;
+			margin: 20px auto;
+		}
+		#submit,#cancel {
+			margin: 0 10px;
+			width: 35%;
+		}
+
+
+		.spinner {
+		  margin: 100px auto;
+		  width: 50px;
+		  height: 60px;
+		  text-align: center;
+		  display: none;
+		}
+
+		.spinner > div {
+		  background-color: #67CF22;
+		  height: 100%;
+		  width: 6px;
+		  display: inline-block;
+		   
+		  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+		  animation: stretchdelay 1.2s infinite ease-in-out;
+		}
+		 
+		.spinner .rect2 {
+		  -webkit-animation-delay: -1.1s;
+		  animation-delay: -1.1s;
+		}
+		 
+		.spinner .rect3 {
+		  -webkit-animation-delay: -1.0s;
+		  animation-delay: -1.0s;
+		}
+		 
+		.spinner .rect4 {
+		  -webkit-animation-delay: -0.9s;
+		  animation-delay: -0.9s;
+		}
+		 
+		.spinner .rect5 {
+		  -webkit-animation-delay: -0.8s;
+		  animation-delay: -0.8s;
+		}
+		 
+		@-webkit-keyframes stretchdelay {
+		  0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
+		  20% { -webkit-transform: scaleY(1.0) }
+		}
+		 
+		@keyframes stretchdelay {
+		  0%, 40%, 100% {
+		    transform: scaleY(0.4);
+		    -webkit-transform: scaleY(0.4);
+		  }  20% {
+		    transform: scaleY(1.0);
+		    -webkit-transform: scaleY(1.0);
+		  }
+		}
+		
+	</style>
+</head>
+<body>
+	<div class="indexbtn_container">
+		<button type="button" class="btn btn-primary" id="upload">
+        	<span>扫描识别</span>
+        	<input id="fileToUpload" type="file" name="fileToUpload" accept="image/*" multiple="multiple">  
+        </button>
+	</div>
+	
+	<form class="form-inline container-fluid">
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">姓名：</label>
+	    <input type="text" class="form-control col-xs-9" id="res_name" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputEmail2" class="col-xs-3">公司：</label>
+	    <input type="text" class="form-control" id="res_company" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">部门：</label>
+	    <input type="text" class="form-control col-xs-9" id="res_department" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">职位：</label>
+	    <input type="text" class="form-control col-xs-9" id="res_job" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">手机：</label>
+	    <input type="number" class="form-control col-xs-9" id="res_tel" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">座机：</label>
+	    <input type="text" class="form-control col-xs-9" id="res_zuoji" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">地址</label>
+	    <input type="text" class="form-control col-xs-9" id="res_address" >
+	  </div>
+	  <div class="row">
+	    <label for="exampleInputName2" class="col-xs-3">邮箱：</label>
+	    <input type="email" class="form-control col-xs-9" id="res_email" >
+	  </div>
+	  <div class="formbtn_container">
+	  	<button type="submit" class="btn btn-success" id="submit">确认</button>
+	  	<button type="submit" class="btn btn-danger" id="cancel">取消</button>
+	  </div>
+	</form>
+
+	<div class="spinner">
+	  <div class="rect1"></div>
+	  <div class="rect2"></div>
+	  <div class="rect3"></div>
+	  <div class="rect4"></div>
+	  <div class="rect5"></div>
+	</div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script>
+ 	// 监听照片拍摄,并获取照片流
+	var fileToUpload = document.getElementById('fileToUpload');
+	var fileToUploadUrl = function () {
+	    fileToUpload.onchange = function (event) {
+	        var files = event.target.files, file;
+	        toBase64(files);
+	    }
+	}();
+
+  function compressPicture(blob) {
+  	  showLoading();
+	  var quality = 0.5, image = new Image();
+	  image.src = blob;
+	  image.onload = function () {
+	    var that = this;
+	    // 生成比例
+	    var width = that.width, height = that.height;
+	    width = width / 4;
+	    height = height / 4;
+	    // 生成canvas画板
+	    var canvas = document.createElement('canvas');
+	    var ctx = canvas.getContext('2d');
+	    canvas.width = width;
+	    canvas.height = height;
+	    ctx.drawImage(that, 0, 0, width, height);
+	    // 生成base64,兼容修复移动设备需要引入mobileBUGFix.js
+	    var imgurl = canvas.toDataURL('image/jpeg', quality);
+	    // 修复IOS兼容问题
+	    if (navigator.userAgent.match(/iphone/i)) {
+	      var mpImg = new MegaPixImage(image);
+	      mpImg.render(canvas, {
+	        maxWidth: width,
+	        maxHeight: height,
+	        quality: quality
+	      });
+	      imgurl = canvas.toDataURL('image/jpeg', quality);
+	    }
+	    // 上传照片
+	    uploadPicture(imgurl);
+	  };
+	};
+
+	function uploadPicture(imgurl) {
+		var bodyData = {
+		  "inputs": [
+		    {
+		      "image": {
+		        "dataType": 50,
+		        "dataValue": imgurl.replace('data:image/png;base64,','').replace('data:image/jpeg;base64,','')
+		      }
+		    }
+		  ]
+		}
+		var settings = {
+	        type: "POST",
+	        dataType: "json",
+	        data: JSON.stringify(bodyData),
+	        url: "http://dm-57.data.aliyun.com/rest/160601/ocr/ocr_business_card.json",
+	        error: function(XHR,textStatus,errorThrown) {
+	            alert ("XHR="+XHR+"\ntextStatus="+textStatus+"\nerrorThrown=" + errorThrown);
+	        },
+	        success: function(data,textStatus) {
+	        	var data = JSON.parse(data.outputs[0].outputValue.dataValue);
+	        	$('#res_name').val(data.name);
+	        	$('#res_company').val(data.company);
+	        	$('#res_department').val(data.department);
+	        	$('#res_job').val(data.title);
+	        	$('#res_tel').val(data.tel_cell);
+	        	$('#res_zuoji').val(data.tel_work);
+	        	$('#res_address').val(data.addr);
+	        	$('#res_email').val(data.email);
+	        	$('.indexbtn_container').hide();
+	        	hideLoading();	
+
+	        },
+	        headers: {
+	            "Content-Type":"application/octet-stream; charset=utf-8",
+	            "Authorization":"APPCODE bf46438bab3b4e5da30556681771fd72"
+	        }
+	    };
+	    $.ajax(settings);
+	}
+	function toBase64(files) {
+		showLoading();
+		var fileReader = new FileReader();
+		fileReader.readAsDataURL(files[0]);
+		fileReader.onload = function () {
+			var base64 = this.result;
+			uploadPicture(base64);
+		}
+	}
+
+	function showLoading() {
+		$('.spinner').show();
+		$('#upload span').text('识别中...');
+	}
+	function hideLoading(){
+		$('.spinner').hide();  	  
+		$("form").show();
+	}
+</script>
+</html>
