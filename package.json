@@ -1,0 +1,43 @@
+{
+  "name": "ocr",
+  "version": "1.0.0",
+  "description": "名片识别系统",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bytes": "^3.0.0",
+    "content-type": "^1.0.4",
+    "debug": "^2.6.9",
+    "depd": "^1.1.2",
+    "ee-first": "^1.1.1",
+    "http-errors": "^1.6.3",
+    "iconv-lite": "^0.4.23",
+    "inherits": "^2.0.3",
+    "media-typer": "^0.3.0",
+    "mime-db": "^1.33.0",
+    "mime-types": "^2.1.18",
+    "ms": "^2.0.0",
+    "on-finished": "^2.3.0",
+    "qs": "^6.5.2",
+    "raw-body": "^2.3.3",
+    "safer-buffer": "^2.1.2",
+    "setprototypeof": "^1.1.0",
+    "statuses": "^1.5.0",
+    "type-is": "^1.6.16",
+    "unpipe": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyf0611/ocr.git"
+  },
+  "author": "cyf0611",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cyf0611/ocr/issues"
+  },
+  "homepage": "https://github.com/cyf0611/ocr#readme"
+}

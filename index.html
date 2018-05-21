@@ -177,86 +177,41 @@
 	    }
 	}();
 
-  function compressPicture(blob) {
-  	  showLoading();
-	  var quality = 0.5, image = new Image();
-	  image.src = blob;
-	  image.onload = function () {
-	    var that = this;
-	    // 生成比例
-	    var width = that.width, height = that.height;
-	    width = width / 4;
-	    height = height / 4;
-	    // 生成canvas画板
-	    var canvas = document.createElement('canvas');
-	    var ctx = canvas.getContext('2d');
-	    canvas.width = width;
-	    canvas.height = height;
-	    ctx.drawImage(that, 0, 0, width, height);
-	    // 生成base64,兼容修复移动设备需要引入mobileBUGFix.js
-	    var imgurl = canvas.toDataURL('image/jpeg', quality);
-	    // 修复IOS兼容问题
-	    if (navigator.userAgent.match(/iphone/i)) {
-	      var mpImg = new MegaPixImage(image);
-	      mpImg.render(canvas, {
-	        maxWidth: width,
-	        maxHeight: height,
-	        quality: quality
-	      });
-	      imgurl = canvas.toDataURL('image/jpeg', quality);
-	    }
-	    // 上传照片
-	    uploadPicture(imgurl);
-	  };
-	};
+  
 
-	function uploadPicture(imgurl) {
-		var bodyData = {
-		  "inputs": [
-		    {
-		      "image": {
-		        "dataType": 50,
-		        "dataValue": imgurl.replace('data:image/png;base64,','').replace('data:image/jpeg;base64,','')
-		      }
-		    }
-		  ]
-		}
-		var settings = {
-	        type: "POST",
-	        dataType: "json",
-	        data: JSON.stringify(bodyData),
-	        url: "http://dm-57.data.aliyun.com/rest/160601/ocr/ocr_business_card.json",
-	        error: function(XHR,textStatus,errorThrown) {
-	            alert ("XHR="+XHR+"\ntextStatus="+textStatus+"\nerrorThrown=" + errorThrown);
-	        },
-	        success: function(data,textStatus) {
-	        	var data = JSON.parse(data.outputs[0].outputValue.dataValue);
-	        	$('#res_name').val(data.name);
-	        	$('#res_company').val(data.company);
-	        	$('#res_department').val(data.department);
-	        	$('#res_job').val(data.title);
-	        	$('#res_tel').val(data.tel_cell);
-	        	$('#res_zuoji').val(data.tel_work);
-	        	$('#res_address').val(data.addr);
-	        	$('#res_email').val(data.email);
-	        	$('.indexbtn_container').hide();
-	        	hideLoading();	
-
-	        },
-	        headers: {
-	            "Content-Type":"application/octet-stream; charset=utf-8",
-	            "Authorization":"APPCODE bf46438bab3b4e5da30556681771fd72"
-	        }
-	    };
-	    $.ajax(settings);
-	}
+	
 	function toBase64(files) {
 		showLoading();
 		var fileReader = new FileReader();
 		fileReader.readAsDataURL(files[0]);
 		fileReader.onload = function () {
-			var base64 = this.result;
-			uploadPicture(base64);
+			var data = this.result;
+			var bodyData = {
+				base64: data
+			}
+			$.ajax({
+				type: "POST",
+		        data: bodyData,
+		        url: "http://127.0.0.1:5566",
+		        error: function(XHR,textStatus,errorThrown) {
+		            alert ("XHR="+XHR+"\ntextStatus="+textStatus+"\nerrorThrown=" + errorThrown);
+		        },
+		        success: function(data,textStatus) {
+		        	if (data) {
+		        		$('#res_name').val(data.name);
+			        	$('#res_company').val(data.company);
+			        	$('#res_department').val(data.department);
+			        	$('#res_job').val(data.title);
+			        	$('#res_tel').val(data.tel_cell);
+			        	$('#res_zuoji').val(data.tel_work);
+			        	$('#res_address').val(data.addr);
+			        	$('#res_email').val(data.email);
+			        	$('.indexbtn_container').hide();
+		        		hideLoading();	
+
+		        	}
+		        }
+			})
 		}
 	}
 
@@ -268,5 +223,7 @@
 		$('.spinner').hide();  	  
 		$("form").show();
 	}
+
+
 </script>
 </html>
